@@ -23,19 +23,43 @@ int main(int argc, char const *argv[])
     int pid = fork();
     if (pid == -1)
         return 1;
-    if (pid == 0)
+    if (pid == 1)
     {
         while (1)
         {
-            printf("just a test %i\n", getpid());
+            printf("child\n");
+            kill(getppid(), SIGKILL);
             usleep(500000);
         }
     }
     else
     {
-        printf("ma3art %i\n", getpid());
-        sleep(2);
-        kill(pid, SIGKILL);
+        // kill(pid, SIGSTOP);
+        // unsigned int t;
+        // do
+        // {
+        //     printf("sleep prcess : ");
+        //     scanf("%d", &t);
+        //     if (t > 0)
+        //     {
+        //         kill(pid, SIGCONT);
+        //         sleep(t);
+        //         kill(pid, SIGSTOP);
+        //     }
+        // } while (t > 0);
+        // kill(pid, SIGKILL);
+
+        while (1)
+        {
+            // printf("%i\n", getpid());
+            printf("parent \n");
+            kill(getpid(), SIGSEGV);
+            kill(getpid(), SIGSEGV);
+            kill(getpid(), SIGSEGV);
+            kill(getpid(), SIGSEGV);
+            usleep(500000);
+        }
+        
     }
     
     return 0;
