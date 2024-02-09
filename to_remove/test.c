@@ -17,9 +17,6 @@ int main(int argc, char const *argv[])
     //     printf("Wasting your cycles. %d\n", getpid());
     //     sleep(1);
     // }
-    
-
-
     int pid = fork();
     if (pid == -1)
         return 1;
