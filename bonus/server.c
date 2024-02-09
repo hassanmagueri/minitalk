@@ -30,6 +30,16 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 	bits_index++;
 	if (bits_index == 8)
 	{
+		if (byte[buffer_index] == '\0')
+		{
+			if (buffer_index != 0)
+			{
+				int i = 0;
+				while (i <= buffer_index)
+					write(1, &byte[i++], 1);
+			}
+			kill(sig_info->si_pid, SIGUSR1);
+		}
 		if (byte[0] == 240)
 		{
 			buffer_index++;
@@ -66,6 +76,9 @@ int main(void)
 	sigaction(SIGUSR1,&sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while(1)
+	{
 		pause();
+	}
+
 	return 0;
 }
