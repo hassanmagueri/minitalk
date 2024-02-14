@@ -38,9 +38,10 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 				while (i <= buffer_index)
 					write(1, &byte[i++], 1);
 			}
+			printf("\n%d\n", sig_info->si_pid);
 			kill(sig_info->si_pid, SIGUSR1);
 		}
-		if (byte[0] == 240)
+		else if (byte[0] == 240)
 		{
 			buffer_index++;
 			if (buffer_index == 4)
@@ -67,8 +68,11 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 	(void)unused;
 }
 
-int main(void)
+int main(int ac, char *av[])
 {
+	if(ac != 1)
+		return 1;
+
 	printf("pid %d\n", getpid());
 	struct sigaction sa;
 	sa.sa_flags = SA_SIGINFO;
@@ -76,9 +80,7 @@ int main(void)
 	sigaction(SIGUSR1,&sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while(1)
-	{
 		pause();
-	}
 
 	return 0;
 }

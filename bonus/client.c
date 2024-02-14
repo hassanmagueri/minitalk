@@ -1,6 +1,12 @@
 #include "../minitalk.h"
 
-int	send_byte( int pid, unsigned char c)
+void print_error_exit()
+{
+	ft_putendl_fd("error", 2);
+	exit(1);
+}
+
+int send_byte(int pid, unsigned char c)
 {
 	int i = 8;
 	while (i--)
@@ -9,30 +15,49 @@ int	send_byte( int pid, unsigned char c)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(500);
+		usleep(100);
+		usleep(100);
 	}
 	return 0;
+}
+
+int is_funct(const char *s, int (*f)(int c))
+{
+	int i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (f(s[i]) == 0)
+			print_error_exit();
+		i++;
+	}
+	return (1);
+}
+
+void siguser(int sig)
+{
+	write(1, "DONE\n", 5);
 }
 
 int main(int argc, char const *argv[])
 {
 	const char *s = argv[2];
-	char str[100];
+	struct sigaction sa;
 
-	if (argc != 3 || ft_atoi(argv[1]) < 0 || ft_atoi(argv[1]) > INT_MAX)
+	is_funct(argv[1], ft_isdigit);
+	if (argc != 3 || ft_atoi(argv[1]) <= 0 || ft_atoi(argv[1]) > INT_MAX)
 		return 1;
-	int	i = 0;
-	if(argc == 1)
-		return 0;
+	sa.sa_flags = 0;
+	sa.sa_handler = siguser;
+	sigaction(SIGUSR1, &sa, NULL);
+	signal(SIGUSR1, siguser);
+	int i = 0;
 	int pid = ft_atoi(argv[1]);
 	i = 0;
-	// printf("%d\n", argv[2][0]);
-	// while (ss[i])
-		// send_byte(pid, 'a');
-		// send_byte(pid, 'a');
-		// send_byte(pid, 240);
 	while (s[i])
 		send_byte(pid, s[i++]);
-	send_byte(pid, 0);
-	return 0;
+	send_byte(pid, '\0');
+	pause();
+	return (0);
 }
