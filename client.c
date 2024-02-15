@@ -15,6 +15,7 @@ int	send_byte( int pid, unsigned char c)
 		else
 			kill(pid, SIGUSR2);
 		usleep(500);
+		// usleep(100);
 	}
 	return 0;
 }

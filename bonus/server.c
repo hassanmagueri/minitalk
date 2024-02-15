@@ -1,8 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
+#include "../minitalk.h"
 
 int bits_count = 0;
 int byte = 0;
@@ -38,8 +34,7 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 				while (i <= buffer_index)
 					write(1, &byte[i++], 1);
 			}
-			printf("\n%d\n", sig_info->si_pid);
-			kill(sig_info->si_pid, SIGUSR1);
+			my_kill(sig_info->si_pid, SIGUSR1);
 		}
 		else if (byte[0] == 240)
 		{
@@ -73,7 +68,9 @@ int main(int ac, char *av[])
 	if(ac != 1)
 		return 1;
 
-	printf("pid %d\n", getpid());
+	ft_putstr_fd("pid ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putendl_fd("",1);
 	struct sigaction sa;
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = siguser;
@@ -81,6 +78,5 @@ int main(int ac, char *av[])
 	sigaction(SIGUSR2, &sa, NULL);
 	while(1)
 		pause();
-
 	return 0;
 }

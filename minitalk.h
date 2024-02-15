@@ -10,3 +10,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <limits.h>
+
+
+void	my_kill(int pid, int sig);
+void    print_error_exit(char *s);
