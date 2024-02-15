@@ -1,62 +1,59 @@
 #include "../minitalk.h"
 
-int bits_count = 0;
-int byte = 0;
+void reset_buffer(unsigned char buffer[], int *buffer_index, int *bits_index)
+{
+	buffer[0] = 0;
+	buffer[1] = 0;
+	buffer[2] = 0;
+	buffer[3] = 0;
+	buffer[4] = 0;
+	(*buffer_index) = 0;
+	(*bits_index) = 0;
+}
+
+void print_buffer(unsigned char buffer[], int buffer_index)
+{
+	int i = 0;
+	while (i <= buffer_index)
+		write(1, &buffer[i++], 1);
+}
 
 void siguser(int n, siginfo_t *sig_info, void *unused)
 {
-	static unsigned char	byte[5];
+	static unsigned char	buffer[5];
 	static int				bits_index;
 	static int				current_pid;
 	static int				buffer_index;
+
 	if (current_pid == 0)
 		current_pid = sig_info->si_pid;
 	else if (current_pid != sig_info->si_pid)
 	{
-		byte[0] = 0;
-		byte[1] = 0;
-		byte[2] = 0;
-		byte[3] = 0;
-		byte[4] = 0;
-		bits_index = 0;
-		buffer_index = 0;
+		reset_buffer(buffer, &buffer_index, &bits_index);
 		current_pid = sig_info->si_pid;
 	}
-	byte[buffer_index] = byte[buffer_index] * 2 + (SIGUSR1 == n);
+	buffer[buffer_index] = buffer[buffer_index] * 2 + (SIGUSR1 == n);
 	bits_index++;
 	if (bits_index == 8)
 	{
-		if (byte[buffer_index] == '\0')
+		if (buffer[buffer_index] == '\0')
 		{
-			if (buffer_index != 0)
-			{
-				int i = 0;
-				while (i <= buffer_index)
-					write(1, &byte[i++], 1);
-			}
+			print_buffer(buffer, buffer_index);
 			my_kill(sig_info->si_pid, SIGUSR1);
 		}
-		else if (byte[0] == 240)
+		else if (buffer[0] == 240)
 		{
 			buffer_index++;
 			if (buffer_index == 4)
 			{
-				byte[4] = 0;
-				int i = 0;
-				while (i < 4)
-					write(1, &byte[i++], 1);
-				byte[0] = 0;
-				byte[1] = 0;
-				byte[2] = 0;
-				byte[3] = 0;
-				byte[4] = 0;
-				buffer_index = 0;
+				print_buffer(buffer, buffer_index);
+				reset_buffer(buffer, &buffer_index, &buffer_index);
 			}
 		}
 		else
 		{
-			write(1, &byte[0], 1);
-			byte[buffer_index] = 0;
+			write(1, &buffer[0], 1);
+			buffer[buffer_index] = 0;
 		}
 		bits_index = 0;
 	}
@@ -65,13 +62,14 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 
 int main(int ac, char *av[])
 {
+	struct sigaction sa;
+
 	if(ac != 1)
 		return 1;
 
 	ft_putstr_fd("pid ", 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putendl_fd("",1);
-	struct sigaction sa;
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = siguser;
 	sigaction(SIGUSR1,&sa, NULL);

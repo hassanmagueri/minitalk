@@ -9,8 +9,7 @@ int send_byte(int pid, unsigned char c)
 			my_kill(pid, SIGUSR1);
 		else
 			my_kill(pid, SIGUSR2);
-		usleep(100);//!!
-		usleep(100);
+		usleep(500);
 	}
 	return 0;
 }
@@ -31,7 +30,7 @@ int is_funct(const char *s, int (*f)(int c))
 
 void siguser(int sig)
 {
-	write(1, "DONE\n", 5);
+	ft_putendl_fd("message send with success", 1);
 }
 
 int main(int argc, char const *argv[])
@@ -39,19 +38,18 @@ int main(int argc, char const *argv[])
 	const char *s = argv[2];
 	struct sigaction sa;
 	int pid;
+	int i = 0;
 
+	i = 0;
 	if (argc != 3)
 		print_error_exit("more or less args that we want");
 	is_funct(argv[1], ft_isdigit);
-	if(ft_atoi(argv[1]) <= 0 || ft_atoi(argv[1]) > INT_MAX)
+	pid = ft_atoi(argv[1]);
+	if(pid <= 0 || pid > INT_MAX)
 		print_error_exit("invalid PID");
 	sa.sa_flags = 0;
 	sa.sa_handler = siguser;
 	sigaction(SIGUSR1, &sa, NULL);
-	// signal(SIGUSR1, siguser);
-	int i = 0;
-	pid = ft_atoi(argv[1]);
-	i = 0;
 	while (s[i])
 		send_byte(pid, s[i++]);
 	send_byte(pid, '\0');
