@@ -18,6 +18,29 @@ void print_buffer(unsigned char buffer[], int buffer_index)
 		write(1, &buffer[i++], 1);
 }
 
+void	handling_buffer(unsigned char buffer[], int *buffer_index, pid_t si_pid)
+{
+	if (buffer[(*buffer_index)] == '\0')
+	{
+		print_buffer(buffer, (*buffer_index));
+		my_kill(si_pid, SIGUSR1);
+	}
+	else if (buffer[0] == 240)
+	{
+		(*buffer_index)++;
+		if ((*buffer_index) == 4)
+		{
+			print_buffer(buffer, (*buffer_index));
+			reset_buffer(buffer, buffer_index, buffer_index);
+		}
+	}
+	else
+	{
+		write(1, &buffer[0], 1);
+		buffer[(*buffer_index)] = 0;
+	}
+}
+
 void siguser(int n, siginfo_t *sig_info, void *unused)
 {
 	static unsigned char	buffer[5];
@@ -36,25 +59,7 @@ void siguser(int n, siginfo_t *sig_info, void *unused)
 	bits_index++;
 	if (bits_index == 8)
 	{
-		if (buffer[buffer_index] == '\0')
-		{
-			print_buffer(buffer, buffer_index);
-			my_kill(sig_info->si_pid, SIGUSR1);
-		}
-		else if (buffer[0] == 240)
-		{
-			buffer_index++;
-			if (buffer_index == 4)
-			{
-				print_buffer(buffer, buffer_index);
-				reset_buffer(buffer, &buffer_index, &buffer_index);
-			}
-		}
-		else
-		{
-			write(1, &buffer[0], 1);
-			buffer[buffer_index] = 0;
-		}
+		handling_buffer(buffer, &buffer_index, sig_info->si_pid);
 		bits_index = 0;
 	}
 	(void)unused;

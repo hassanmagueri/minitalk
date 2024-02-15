@@ -6,10 +6,11 @@ int send_byte(int pid, unsigned char c)
 	while (i--)
 	{
 		if ((c >> i) % 2)
-			my_kill(pid, SIGUSR1);
+			my_kill(pid, 1);
 		else
 			my_kill(pid, SIGUSR2);
-		usleep(500);
+		usleep(100);
+		usleep(100);
 	}
 	return 0;
 }
