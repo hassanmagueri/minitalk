@@ -6,11 +6,11 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:48:01 by emagueri          #+#    #+#             */
-/*   Updated: 2024/02/16 00:31:15 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:19:25 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minitalk.h"
+#include "libft.h"
 
 int	ft_atoi(const char	*str)
 {

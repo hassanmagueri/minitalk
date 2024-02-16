@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/emagueri/Desktop/minitalk",
-      "program": "/Users/emagueri/Desktop/minitalk/build/Debug/outDebug"
+      "cwd": "/Users/emagueri/Desktop/minitalk/bonus",
+      "program": "/Users/emagueri/Desktop/minitalk/bonus/build/Debug/outDebug"
     }
   ]
 }

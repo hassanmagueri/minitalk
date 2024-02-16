@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 12:33:25 by emagueri          #+#    #+#             */
-/*   Updated: 2024/02/16 00:31:21 by emagueri         ###   ########.fr       */
+/*   Created: 2023/11/07 12:28:26 by emagueri          #+#    #+#             */
+/*   Updated: 2023/11/11 23:25:36 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minitalk.h"
+#include "libft.h" 
 
-void	ft_putendl_fd(char *s, int fd)
+void	ft_putchar_fd(char c, int fd)
 {
-	if (!s)
-		return ;
 	if (fd < 0)
 		return ;
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	write(fd, &c, 1);
 }

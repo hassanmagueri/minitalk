@@ -60,7 +60,9 @@
     "string.h": "c",
     "stdlib.h": "c",
     "signal.h": "c",
-    "limits.h": "c"
+    "limits.h": "c",
+    "minitalk.h": "c",
+    "unistd.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

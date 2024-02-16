@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/16 15:47:54 by emagueri          #+#    #+#             */
-/*   Updated: 2024/02/16 15:56:06 by emagueri         ###   ########.fr       */
+/*   Created: 2024/02/16 15:48:02 by emagueri          #+#    #+#             */
+/*   Updated: 2024/02/16 15:50:51 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,9 @@ void	siguser(int sig)
 
 int	main(int argc, char const *argv[])
 {
-	struct sigaction	sa;
-	const char			*s;
-	int					pid;
-	int					i;
+	const char	*s;
+	int			pid;
+	int			i;
 
 	s = argv[2];
 	i = 0;
@@ -64,11 +63,7 @@ int	main(int argc, char const *argv[])
 	pid = ft_atoi(argv[1]);
 	if (pid <= 0 || pid > INT_MAX)
 		print_error_exit("invalid PID");
-	sa.sa_flags = 0;
-	sa.sa_handler = siguser;
-	sigaction(SIGUSR1, &sa, NULL);
 	while (s[i])
 		send_byte(pid, s[i++]);
-	send_byte(pid, '\0');
 	return (0);
 }

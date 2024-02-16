@@ -6,11 +6,11 @@
 /*   By: emagueri <emagueri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:36:49 by emagueri          #+#    #+#             */
-/*   Updated: 2023/11/11 23:25:45 by emagueri         ###   ########.fr       */
+/*   Updated: 2024/02/16 00:31:26 by emagueri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minitalk.h"
 
 static void	ft_putnbr(long nb, int fd)
 {
